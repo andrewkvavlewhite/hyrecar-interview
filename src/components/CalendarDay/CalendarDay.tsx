@@ -8,14 +8,14 @@ import { isSameMonth, isSameDay, getDate } from 'date-fns';
 const styles = (theme: Theme) => createStyles({
 	dayCell: {
 		display: 'flex',
-		flex: '1 0 13%',
+		flex: 1,
 		flexDirection: 'column',
 		border: '1px solid lightgray',
 		cursor: 'pointer'
 	},
 	dayCellOutsideMonth: {
 		display: 'flex',
-		flex: '1 0 13%',
+		flex: 1,
 		flexDirection: 'column',
 		border: '1px solid lightgray',
 		backgroundColor: 'rgba( 211, 211, 211, 0.4 )',

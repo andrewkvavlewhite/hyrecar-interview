@@ -1,10 +1,13 @@
 import { getDaysInMonth, startOfMonth, endOfMonth, getDay, subDays, addDays, } from 'date-fns';
 
 export const daysArr = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
+export const daysArrAbbr = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
+export const daysArrInitial = [ 'S', 'M', 'T', 'W', 'Th', 'F', 'Sa' ];
 export const monthsArr = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+export const monthsArrAbbr = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 
 export function getMonthCells( currentDate: Date ) {
-	// Six rows of sevel days = 42 calendar cells
+	// Six rows of seven days = 42 calendar cells
 	const totalCells = 42;
 
 	// get current date

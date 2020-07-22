@@ -7,9 +7,16 @@ const styles = (theme: Theme) => createStyles({
 		display: 'flex',
 		width: '100%',
 		flexGrow: 1,
-		flexDirection: 'row',
-		flexWrap: 'wrap',
+		flexDirection: 'column',
+		flexWrap: 'nowrap',
 		border: '1px solid lightgray'
+	},
+	weekContainer: {
+		display: 'flex',
+		width: '100%',
+		flex: 1,
+		flexDirection: 'row',
+		flexWrap: 'nowrap',
 	}
 });
 
@@ -20,11 +27,31 @@ interface Props extends WithStyles<typeof styles>{
 	date: Date,
 }
 
-const MonthContainer = ( props: Props ) =>
-	<div className={ props.classes.monthContainer }>
-		{ props.calendarCells.map( ( dateObj, i ) =>
-			<CalendarDayContainer key={ i } calendarDate={ props.date } dateObj={ dateObj } />
-		) }
-	</div>
+const MonthContainer = ( props: Props ) => {
+	const { classes, calendarCells } = props;
 
+	const calendarCellGrid = calendarCells.reduce((acc, cur, idx) => {
+		const arr = [...acc];
+		const rowIdx = Math.trunc( idx / 7 );
+		if (acc.length <= rowIdx) arr.push([]);
+		arr[rowIdx].push(cur);
+		return arr;
+	}, []);
+
+	return (
+		<div className={ classes.monthContainer }>
+			{
+				calendarCellGrid.map((weekRow, i) => (
+					<div key={ i } className={ classes.weekContainer }>
+						{
+							weekRow.map( ( dateObj, i ) =>
+								<CalendarDayContainer key={ i } calendarDate={ props.date } dateObj={ dateObj } />
+							)
+						}
+					</div>
+				))
+			}
+		</div>
+	);
+}
 export default withStyles( styles )( MonthContainer );

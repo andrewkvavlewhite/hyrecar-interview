@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import green from '@material-ui/core/colors/green';
@@ -13,6 +13,7 @@ import CalendarGrid from '../CalendarGrid';
 import AgendaDayContainer from '../AgendaDay/AgendaDayContainer';
 import AddReminderContainer from '../AddReminder/AddReminderContainer';
 import './App.css';
+import useMedia from '../../utils/hooks/useMedia';
 
 const styles = (theme: Theme) => createStyles({
 	root: {
@@ -26,8 +27,8 @@ const styles = (theme: Theme) => createStyles({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
-		padding: '10px',
-		margin: '25px',
+		// padding: '10px',
+		// margin: '25px',
 		width: '100%',
 		height: '90%'
 	},
@@ -54,69 +55,55 @@ interface Props extends WithStyles<typeof styles>{
 	onFabAddClick: () => void
 }
 
-interface State {
-	date: Date
-}
+const App = ( props: Props ) => {
+	const { classes, onFabAddClick } = props;
+	const [date, setDate] = useState(new Date());
+	const { isMobile } = useMedia();
 
-class App extends Component<Props, State> {
-	constructor( props: Props ) {
-		super( props );
-
-		this.state = {
-			date: new Date()
-		};
-	}
-
-	compnentDidMount() {
-
-	}
+	const month = date.toLocaleString( 'en-us', { month: isMobile ? 'short' : 'long' } );
+	const year = dateFns.getYear( date );
 
 	// arrow functions to skip binding in constructor
-	prevMonth = () => {
-		this.setState( { date: dateFns.subMonths( this.state.date, 1 ) } );
+	const prevMonth = () => {
+		setDate(dateFns.subMonths( date, 1 ));
 	}
 
-	nextMonth = () => {
-		this.setState( { date: dateFns.addMonths( this.state.date, 1 ) } );
+	const nextMonth = () => {
+		setDate(dateFns.addMonths( date, 1 ));
 	}
 
-	render() {
-		const { classes, onFabAddClick } = this.props;
-		const { date } = this.state;
-
-		const month = date.toLocaleString( 'en-us', { month: 'long' } );
-		const year = dateFns.getYear( date );
-
-		return (
-			<div className={ classes.root }>
-				<Paper className={ classes.calendar }>
-					<header className={ classes.calendarHeader }>
-						<IconButton aria-label='Last Month' onClick={ this.prevMonth }>
-							<KeyboardArrowLeftIcon fontSize='large' />
-						</IconButton>
-						<Typography variant='h3'>
-							{ month } { year }
-						</Typography>
-						<IconButton aria-label='Next Month' onClick={ this.nextMonth }>
-							<KeyboardArrowRightIcon fontSize='large' />
-						</IconButton>
-					</header>
-					<CalendarGrid
-						date={ date }
-					/>
-					<Fab
-						aria-label='Add'
-						className={classes.fabAdd}
-						onClick={ onFabAddClick }
-					>
-						<AddIcon />
-					</Fab>
-				</Paper>
-				<AgendaDayContainer />
-				<AddReminderContainer />
-			</div>
-		);
-	}
+	return (
+		<div className={ classes.root }>
+			<Paper 
+				className={ classes.calendar }
+				style={{ margin: isMobile ? '0px' : '25px', padding: isMobile ? '0px' : '10px' }}
+			>
+				<header className={ classes.calendarHeader }>
+					<IconButton aria-label='Last Month' onClick={ prevMonth }>
+						<KeyboardArrowLeftIcon fontSize='large' />
+					</IconButton>
+					<Typography variant={isMobile ? 'h4' : 'h3'}>
+						{ month } { year }
+					</Typography>
+					<IconButton aria-label='Next Month' onClick={ nextMonth }>
+						<KeyboardArrowRightIcon fontSize='large' />
+					</IconButton>
+				</header>
+				<CalendarGrid
+					date={ date }
+				/>
+				<Fab
+					aria-label='Add'
+					className={classes.fabAdd}
+					onClick={ onFabAddClick }
+				>
+					<AddIcon />
+				</Fab>
+			</Paper>
+			<AgendaDayContainer />
+			<AddReminderContainer />
+		</div>
+	);
 }
 
 export default withStyles( styles )( App );
