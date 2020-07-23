@@ -6,7 +6,7 @@ const compression = require('compression')
 const cors = require('cors')
 const helmet = require('helmet')
 // Import routes
-const booksRouter = require('./routes/books-route')
+const appointmentsRouter = require('./routes/appointments-route')
 // Set default port for express app
 const PORT = process.env.PORT || 5000
 // Create express app
@@ -23,8 +23,8 @@ app.get('/api/hello', (req, res) => {
     res.send({ express: 'Hello From Express' });
   });
 
-// Implement books route
-app.use('/books', booksRouter)
+// Implement appointments route
+app.use('/appointments', appointmentsRouter)
 // Implement 500 error route
 app.use(function (err, req, res, next) {
   console.error(err.stack)
