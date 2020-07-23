@@ -1,0 +1,55 @@
+const knex = require('./../db')
+
+exports.all = async (req, res) => {
+  knex
+    .select('*')
+    .from('appointments')
+    .then(userData => {
+      res.json(userData)
+    })
+    .catch(err => {
+      res.json({ message: `There was an error retrieving appointments: ${err}` })
+    })
+}
+
+exports.create = async (req, res) => {
+  knex('appointments')
+    .insert({
+      'user': req.body.user,
+      'title': req.body.title,
+      'startDate': req.body.startDate,
+      'endDate': req.body.endDate,
+      'color': req.body.color,
+    })
+    .then(() => {
+      res.json({ message: `Appointment \'${req.body.title}\' by ${req.body.author} created.` })
+    })
+    .catch(err => {
+      res.json({ message: `There was an error creating ${req.body.title} appointment: ${err}` })
+    })
+}
+
+exports.delete = async (req, res) => {
+  knex('appointments')
+    .where('id', req.body.id)
+    .del()
+    .then(() => {
+      res.json({ message: `Appointment ${req.body.id} deleted.` })
+    })
+    .catch(err => {
+      res.json({ message: `There was an error deleting ${req.body.id} appointment: ${err}` })
+    })
+}
+
+exports.reset = async (req, res) => {
+  knex
+    .select('*')
+    .from('appointments')
+    .truncate()
+    .then(() => {
+      res.json({ message: 'Appointments list cleared.' })
+    })
+    .catch(err => {
+      res.json({ message: `There was an error resetting appointment list: ${err}.` })
+    })
+}
