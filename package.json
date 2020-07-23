@@ -1,6 +1,7 @@
 {
   "name": "express-calendar",
   "version": "1.0.0",
+  "proxy": "http://localhost:5000/",
   "scripts": {
     "client": "cd client && npm start",
     "server": "cd server && npm start",

@@ -17,6 +17,7 @@ import useMedia from '../../utils/hooks/useMedia';
 import { getNewDate, formatDatekey } from '../../utils/dateUtils';
 import { compareAsc } from 'date-fns';
 import { useLocalStorage } from 'react-use';
+import { AppointmentsAPI } from '../../api';
 
 const styles = (theme: Theme) => createStyles({
 	root: {
@@ -79,18 +80,19 @@ const App = ( props: Props ) => {
 	}
 
 	const addAppointment = appt => {
-		const newMap = { ...appointmentMap };
+		AppointmentsAPI.create(appt);
+		// const newMap = { ...appointmentMap };
 		
-		const formattedDateKey = formatDatekey(appt.startDate);
+		// const formattedDateKey = formatDatekey(appt.startDate);
 
-		if (!(formattedDateKey in newMap)) {
-			newMap[formattedDateKey] = [];
-		}
+		// if (!(formattedDateKey in newMap)) {
+		// 	newMap[formattedDateKey] = [];
+		// }
 
-		newMap[formattedDateKey].push(appt);
-		newMap[formattedDateKey] = newMap[formattedDateKey].sort(compareAsc);
+		// newMap[formattedDateKey].push(appt);
+		// newMap[formattedDateKey] = newMap[formattedDateKey].sort(compareAsc);
 
-		setAppointmentMap(newMap);
+		// setAppointmentMap(newMap);
 	}
 
 	return (

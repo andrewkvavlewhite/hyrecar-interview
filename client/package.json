@@ -13,6 +13,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",
+    "axios": "^0.19.2",
     "date-fns": "^2.0.0-alpha.27",
     "invert-color": "^2.0.0",
     "react": "^16.8.6",
