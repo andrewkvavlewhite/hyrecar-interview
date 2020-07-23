@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import deepPurple from '@material-ui/core/colors/deepPurple';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { isSameMonth, isSameDay, getDate } from 'date-fns';
+import AppointmentType from '../../types/AppointmentType';
+import { Typography } from '@material-ui/core';
+import invert, { RGB, RgbArray, HexColor, BlackWhite } from 'invert-color';
 
+
+const REMINDER_HEIGHT = 25;
 
 const styles = (theme: Theme) => createStyles({
 	dayCell: {
@@ -54,12 +59,21 @@ const styles = (theme: Theme) => createStyles({
 		backgroundColor: deepPurple[800],
 	},
 	remindersContainer: {
-		height: '100%'
+		height: '100%',
+		overflow: 'hidden'
+	},
+	reminder: {
+		display: 'flex',
+		alignItems: 'center',
+		height: REMINDER_HEIGHT,
+		borderRadius: '5px',
+		paddingLeft: '5px',
 	}
 });
 
 interface DateObj {
 	date: Date
+	appointments: AppointmentType[]
 }
 
 interface Props extends WithStyles<typeof styles>{
@@ -70,7 +84,14 @@ interface Props extends WithStyles<typeof styles>{
 
 const CalendarDay = (props: Props) => {
 	const { classes, dateObj, calendarDate, onDayClick } = props;
-	const [ focused, setFocused ] = useState(false)
+	const [ focused, setFocused ] = useState(false);
+	const [ numViewableReminders, setNumViewableReminders ] = useState(0);
+	const ref = useRef(null);
+
+	useLayoutEffect(() => {
+	  	const numRemindersToShow = Math.trunc(ref.current.clientHeight / REMINDER_HEIGHT);
+	  	setNumViewableReminders(numRemindersToShow);
+	});
 
 	const isToday = isSameDay( dateObj.date, new Date() );
 	const avatarClass = isToday && focused ? classes.focusedTodayAvatar :
@@ -92,9 +113,33 @@ const CalendarDay = (props: Props) => {
 					: classes.dayCellOutsideMonth
 			}
 		>
-			<Avatar className={ avatarClass }>{ getDate( dateObj.date ) }</Avatar>
-			<div className={ classes.remindersContainer }>
-				{/* reminders go here */}
+			<div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+				<Avatar className={ avatarClass }>{ getDate( dateObj.date ) }</Avatar>
+				{
+					dateObj.appointments.length - numViewableReminders > 0 && (
+						<Avatar
+							className={ avatarClass }
+							style={{ color: 'red', backgroundColor: 'transparent' }}
+						>
+							+{ dateObj.appointments.length - numViewableReminders }
+						</Avatar>
+					)
+				}
+			</div>
+			<div ref={ref} className={ classes.remindersContainer }>
+				{
+					dateObj.appointments.slice(0, numViewableReminders).map(appt => (
+						<div
+							className={ classes.reminder }
+							style={{ 
+								backgroundColor: appt.color,
+								color: invert(appt.color, true)
+							}}
+						>
+							<Typography style={{ fontSize: 14 }}>{ appt.title }</Typography>
+						</div> 
+					))
+				}
 			</div>
 		</div>
 	)

@@ -8,7 +8,8 @@ import {
 
 const initialAgendaState = {
 	isOpen: false,
-	date: null
+	date: null,
+	appointments: []
 }
 
 const initialAddReminderState = {
@@ -20,12 +21,14 @@ function agendaStatus( state = initialAgendaState , action: any ) {
 		case OPEN_AGENDA:
 			return {
 				isOpen: true,
-				date: action.dateObj.date
+				date: action.dateObj.date,
+				appointments: action.dateObj.appointments
 			}
 		case CLOSE_AGENDA:
 			return {
 				isOpen: false,
-				date: null
+				date: null,
+				appointments: []
 			}
 		default: return state
 	}

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import CalendarDayContainer from '../CalendarDay/CalendarDayContainer';
+import AppointmentType from '../../types/AppointmentType';
+import { format } from 'date-fns';
 
 const styles = (theme: Theme) => createStyles({
 	monthContainer: {
@@ -14,6 +16,7 @@ const styles = (theme: Theme) => createStyles({
 	weekContainer: {
 		display: 'flex',
 		width: '100%',
+		height: '16.6%',
 		flex: 1,
 		flexDirection: 'row',
 		flexWrap: 'nowrap',
@@ -45,7 +48,11 @@ const MonthContainer = ( props: Props ) => {
 					<div key={ i } className={ classes.weekContainer }>
 						{
 							weekRow.map( ( dateObj, i ) =>
-								<CalendarDayContainer key={ i } calendarDate={ props.date } dateObj={ dateObj } />
+								<CalendarDayContainer
+									key={ i }
+									calendarDate={ props.date }
+									dateObj={ dateObj }
+								/>
 							)
 						}
 					</div>

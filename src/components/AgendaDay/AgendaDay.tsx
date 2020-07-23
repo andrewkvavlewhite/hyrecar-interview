@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography'
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 import * as dateFns from 'date-fns';
+import AppointmentType from '../../types/AppointmentType';
+import ReminderList from './ReminderList';
 
 const styles = (theme: Theme) => createStyles({
 	remindersContainer: {
@@ -31,7 +33,8 @@ const styles = (theme: Theme) => createStyles({
 interface Props extends WithStyles<typeof styles>{
 	agendaStatus: {
 		isOpen: boolean,
-		date: Date
+		date: Date,
+		appointments: AppointmentType[]
 	}
 	onClose: () => void
 }
@@ -56,9 +59,7 @@ const AgendaDay = (props: Props) => {
 			</DialogTitle>
 			<Divider light />
 			<DialogContent className={ classes.remindersContainer }>
-				<Typography>
-					Use this space to list the reminders.
-				</Typography>
+				<ReminderList appointments={agendaStatus.appointments} />
 			</DialogContent>
 		</Dialog>
 	);

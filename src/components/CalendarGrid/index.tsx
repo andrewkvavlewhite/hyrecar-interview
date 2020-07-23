@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles'
 import DaysRow from './DaysRow'
 import MonthContainer from './MonthContainer'
-import { getMonthCells } from '../../utils/dateUtils'
+import { getMonthCells, formatDatekey } from '../../utils/dateUtils'
+import AppointmentType from '../../types/AppointmentType'
 
 const styles = (theme: Theme) => createStyles({
 	calendarGrid: {
@@ -12,17 +13,23 @@ const styles = (theme: Theme) => createStyles({
 		alignItems: 'center',
 		justifyContent: 'center',
 		width: '100%',
-		backgroundColor: 'yellow'
 	}
 });
 
 interface Props extends WithStyles<typeof styles>{
-	date: Date
+	date: Date,
+	appointments: Object
 }
 
 const CalendarGrid = (props: Props) => {
-	const { classes, date } = props;
+	const { classes, date, appointments } = props;
 	const calendarCells = getMonthCells( date );
+
+	for (let cell of calendarCells) {
+		const formattedDateKey = formatDatekey(cell.date);
+		cell.appointments = appointments[formattedDateKey] || [];
+	}
+
 	return (
 		<div className={ classes.calendarGrid }>
 			<DaysRow />

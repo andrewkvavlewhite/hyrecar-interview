@@ -1,10 +1,24 @@
-import { getDaysInMonth, startOfMonth, endOfMonth, getDay, subDays, addDays, } from 'date-fns';
+import { getDaysInMonth, startOfMonth, endOfMonth, getDay, subDays, addDays, setMinutes, getMinutes, setSeconds, format } from 'date-fns';
 
 export const daysArr = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
 export const daysArrAbbr = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
 export const daysArrInitial = [ 'S', 'M', 'T', 'W', 'Th', 'F', 'Sa' ];
 export const monthsArr = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
 export const monthsArrAbbr = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
+
+export function getNewDate() {
+	let newDate = new Date();
+	newDate = setSeconds(newDate, 0);
+	return newDate;
+}
+
+export const formatDatekey = (date: Date) => format(date, 'd/M/yyyy');
+
+export function nextHalfHourMark( date: Date ) {
+	const minutes = getMinutes(date);
+	const roundedMinutes = Math.trunc(minutes / 30) * 30 + 30;
+	return setMinutes(date, roundedMinutes);
+}
 
 export function getMonthCells( currentDate: Date ) {
 	// Six rows of seven days = 42 calendar cells

@@ -14,6 +14,9 @@ import AgendaDayContainer from '../AgendaDay/AgendaDayContainer';
 import AddReminderContainer from '../AddReminder/AddReminderContainer';
 import './App.css';
 import useMedia from '../../utils/hooks/useMedia';
+import { getNewDate, formatDatekey } from '../../utils/dateUtils';
+import { compareAsc } from 'date-fns';
+import { useLocalStorage } from 'react-use';
 
 const styles = (theme: Theme) => createStyles({
 	root: {
@@ -57,7 +60,10 @@ interface Props extends WithStyles<typeof styles>{
 
 const App = ( props: Props ) => {
 	const { classes, onFabAddClick } = props;
-	const [date, setDate] = useState(new Date());
+	const [date, setDate] = useState(getNewDate());
+	const [appointmentMap, setAppointmentMap, removeAppointment] = useLocalStorage('appointmentMap', {});
+	// removeAppointment()
+	// const [ appointmentMap, setAppointmentMap ] = useState({});
 	const { isMobile } = useMedia();
 
 	const month = date.toLocaleString( 'en-us', { month: isMobile ? 'short' : 'long' } );
@@ -70,6 +76,21 @@ const App = ( props: Props ) => {
 
 	const nextMonth = () => {
 		setDate(dateFns.addMonths( date, 1 ));
+	}
+
+	const addAppointment = appt => {
+		const newMap = { ...appointmentMap };
+		
+		const formattedDateKey = formatDatekey(appt.startDate);
+
+		if (!(formattedDateKey in newMap)) {
+			newMap[formattedDateKey] = [];
+		}
+
+		newMap[formattedDateKey].push(appt);
+		newMap[formattedDateKey] = newMap[formattedDateKey].sort(compareAsc);
+
+		setAppointmentMap(newMap);
 	}
 
 	return (
@@ -91,6 +112,7 @@ const App = ( props: Props ) => {
 				</header>
 				<CalendarGrid
 					date={ date }
+					appointments={appointmentMap}
 				/>
 				<Fab
 					aria-label='Add'
@@ -101,7 +123,9 @@ const App = ( props: Props ) => {
 				</Fab>
 			</Paper>
 			<AgendaDayContainer />
-			<AddReminderContainer />
+			<AddReminderContainer onSave={newAppointment => {
+				addAppointment(newAppointment);
+			}} />
 		</div>
 	);
 }
