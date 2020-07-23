@@ -53,12 +53,19 @@ interface Props extends WithStyles<typeof styles>{
 	onSave: (appointment: AppointmentType) => void
 }
 
+const STATE_DEFAULTS = {
+	TITLE: '',
+	COLOR: '#fff',
+	START_DATE: () => getNewDate(),
+	END_DATE: () => addMinutes(nextHalfHourMark(getNewDate()), 30),
+};
+
 const AddReminder = (props: Props) => {
 	const { classes, isOpen, onClose, onSave } = props;
-	const [title, setTitle] = useState('');
-	const [color, setColor] = useState('#fff');
-	const [startDate, setStartDate] = useState(getNewDate());
-	const [endDate, setEndDate] = useState(addMinutes(nextHalfHourMark(getNewDate()), 30));
+	const [title, setTitle] = useState(STATE_DEFAULTS.TITLE);
+	const [color, setColor] = useState(STATE_DEFAULTS.COLOR);
+	const [startDate, setStartDate] = useState(STATE_DEFAULTS.START_DATE());
+	const [endDate, setEndDate] = useState(STATE_DEFAULTS.END_DATE());
 
 	// make sure start date is never later than end date, and vice versa
 	useEffect(() => { isAfter(startDate, endDate) && setEndDate(startDate) }, [startDate]);
@@ -127,10 +134,10 @@ const AddReminder = (props: Props) => {
 							endDate,
 							color
 						});
-						setTitle('');
-						setColor('');
-						setStartDate(getNewDate());
-						setEndDate(addMinutes(nextHalfHourMark(getNewDate()), 30));
+						setTitle(STATE_DEFAULTS.TITLE);
+						setColor(STATE_DEFAULTS.COLOR);
+						setStartDate(STATE_DEFAULTS.START_DATE());
+						setEndDate(STATE_DEFAULTS.END_DATE());
 						onClose();
 					}}
 					color="primary"
