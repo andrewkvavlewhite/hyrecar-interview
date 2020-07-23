@@ -15,6 +15,8 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 20,
+        marginBottom: '5px',
+        borderRadius: '10px',
     },
 	closeButton: {
 		position: 'absolute',
@@ -56,7 +58,7 @@ const ReminderList = (props: Props) => {
                                 { appt.title }
                             </Typography>
                             <Typography style={{ color: invert(appt.color, true) }}>
-                                { format(new Date(appt.startDate), 'h:m a') }
+                                { format(new Date(appt.startDate), 'h:mm a') }
                             </Typography>
                         </div>
                     );

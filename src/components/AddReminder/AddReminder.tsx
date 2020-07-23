@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@material-ui/core/Dialog';
 import FormControl from '@material-ui/core/FormControl';
@@ -7,15 +7,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import { WithStyles, withStyles, createStyles, Theme } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
 import FormGroup from '@material-ui/core/FormGroup';
-import { DatePicker, TimePicker, DateTimePicker } from '@material-ui/pickers';
+import { DateTimePicker } from '@material-ui/pickers';
 import { Typography, Container, DialogActions, Button, TextField } from '@material-ui/core';
 import { isAfter, addMinutes } from 'date-fns';
 import { nextHalfHourMark, getNewDate } from '../../utils/dateUtils';
 import AppointmentType from '../../types/AppointmentType';
-import ColorPicker from 'material-ui-color-picker'
+import { SketchPicker } from 'react-color';
 
 const styles = (theme: Theme) => createStyles({
 	addReminderFormContainer: {
@@ -33,13 +31,20 @@ const styles = (theme: Theme) => createStyles({
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
-		// justifyContent: 'space-between',
 		'& > *': {
 			marginRight: '20px',
 		}
 	},
 	datetimeInputs: {
-	}
+	},
+	colorContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		'& > *': {
+			marginRight: '20px',
+		}
+	},
 });
 
 interface Props extends WithStyles<typeof styles>{
@@ -51,7 +56,7 @@ interface Props extends WithStyles<typeof styles>{
 const AddReminder = (props: Props) => {
 	const { classes, isOpen, onClose, onSave } = props;
 	const [title, setTitle] = useState('');
-	const [color, setColor] = useState('');
+	const [color, setColor] = useState('#fff');
 	const [startDate, setStartDate] = useState(getNewDate());
 	const [endDate, setEndDate] = useState(addMinutes(nextHalfHourMark(getNewDate()), 30));
 
@@ -99,15 +104,16 @@ const AddReminder = (props: Props) => {
 									/>
 								</div>
 							</div>
-							<ColorPicker
-								name='color'
-								defaultValue="color"
-								value={color}
-								onChange={c => {
-									console.log(c)
-									setColor(c);
-								}}
-							/>
+							<div className={ classes.colorContainer }>
+								<Typography>Color:</Typography>
+								<SketchPicker
+									color={color}
+									onChange={c => {
+										// console.log(c)
+										setColor(c.hex);
+									}}
+								/>
+							</div>
 						</FormGroup>
 					</FormControl>
 				</Container>
