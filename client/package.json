@@ -1,0 +1,43 @@
+{
+  "name": "react-redux-calendar",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:5000/",
+  "dependencies": {
+    "@date-io/date-fns": "^1.1.0",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^3.0.2",
+    "@material-ui/pickers": "^3.2.10",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-redux": "^7.1.7",
+    "date-fns": "^2.0.0-alpha.27",
+    "invert-color": "^2.0.0",
+    "react": "^16.8.6",
+    "react-color": "^2.18.1",
+    "react-dom": "^16.8.6",
+    "react-redux": "^6.0.1",
+    "react-responsive": "^8.1.0",
+    "react-scripts": "3.4.0",
+    "react-use": "^15.3.2",
+    "redux": "^4.0.1",
+    "typescript": "~3.7.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

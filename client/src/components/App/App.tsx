@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import green from '@material-ui/core/colors/green';
@@ -65,6 +65,36 @@ const App = ( props: Props ) => {
 	// removeAppointment()
 	// const [ appointmentMap, setAppointmentMap ] = useState({});
 	const { isMobile } = useMedia();
+
+
+
+	const callApi = async () => {
+		const response = await fetch('/api/hello');
+		const body = await response.json();
+		if (response.status !== 200) throw Error(body.message);
+		return body;
+	  };
+	const handleSubmit = async e => {
+		e.preventDefault();
+		const response = await fetch('/api/world', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ post: this.state.post }),
+		});
+		const body = await response.text();
+		// this.setState({ responseToPost: body });
+		console.log(body)
+	};
+
+	useEffect(() => {
+		callApi()
+			.then(res => console.log(res.express))
+			.catch(err => console.log(err));
+	}, []);
+
+
 
 	const month = date.toLocaleString( 'en-us', { month: isMobile ? 'short' : 'long' } );
 	const year = dateFns.getYear( date );
