@@ -36,7 +36,7 @@ const DaysRow = ( props: Props ) => {
 	return (
 		<div className={ props.classes.daysRow }>
 			{ weekDaysArr.map( ( day, i ) =>
-				<div className={ props.classes.dayNameCell }>
+				<div key={i} className={ props.classes.dayNameCell }>
 					<DayName fontSize={weekDayFontSize} key={ i } day={ day } />
 				</div>
 			) }

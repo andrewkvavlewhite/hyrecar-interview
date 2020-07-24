@@ -1,5 +1,6 @@
 
 interface AppointmentType {
+    id?: number
     title: string
     startDate: Date
     endDate: Date

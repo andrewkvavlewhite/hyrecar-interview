@@ -53,7 +53,7 @@ const ReminderList = (props: Props) => {
             {
                 appointments.map(appt => {
                     return (
-                        <div className={ classes.reminder } style={{ backgroundColor: appt.color }}>
+                        <div key={appt.id} className={ classes.reminder } style={{ backgroundColor: appt.color }}>
                             <Typography style={{ color: invert(appt.color, true) }}>
                                 { appt.title }
                             </Typography>

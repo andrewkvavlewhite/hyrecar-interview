@@ -130,6 +130,7 @@ const CalendarDay = (props: Props) => {
 				{
 					dateObj.appointments.slice(0, numViewableReminders).map(appt => (
 						<div
+							key={appt.id}
 							className={ classes.reminder }
 							style={{ 
 								backgroundColor: appt.color,
