@@ -1,5 +1,14 @@
 // Import path module
 const path = require('path')
+const fs = require('fs');
+
+const dir = './db';
+
+// Create db directory if it doesn't exist
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
 // Get the location of database.sqlite file
 const dbPath = path.resolve(__dirname, 'db/database.sqlite')
 // Create connection to SQLite database
