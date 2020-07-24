@@ -1,11 +1,11 @@
 {
   "name": "express-calendar",
   "version": "1.0.0",
-  "proxy": "http://localhost:5000/",
   "scripts": {
+    "postinstall": "cd server && npm install && cd ../client && npm install",
     "client": "cd client && npm start",
     "server": "cd server && npm start",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "start": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "dependencies": {},
   "devDependencies": {
