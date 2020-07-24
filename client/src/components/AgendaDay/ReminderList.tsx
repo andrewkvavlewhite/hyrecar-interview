@@ -5,6 +5,8 @@ import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/s
 import { format } from 'date-fns';
 import AppointmentType from '../../types/AppointmentType';
 import invert from 'invert-color';
+import Button from '@material-ui/core/Button';
+import { AppointmentsAPI } from '../../api';
 
 const styles = (theme: Theme) => createStyles({
 	remindersContainer: {
@@ -60,6 +62,9 @@ const ReminderList = (props: Props) => {
                             <Typography style={{ color: invert(appt.color, true) }}>
                                 { format(new Date(appt.startDate), 'h:mm a') }
                             </Typography>
+                            <Button onClick={() => {
+                                AppointmentsAPI.delete(appt.id)
+                            }}>x</Button>
                         </div>
                     );
                 })

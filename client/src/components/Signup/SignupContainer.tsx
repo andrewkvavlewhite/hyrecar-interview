@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 
-import App from './App';
+import Signup from './Signup';
 
-import { openAddReminder, login } from '../../redux/actions';
+import { login } from '../../redux/actions';
 
 interface Props {}
 interface State {
@@ -23,6 +23,6 @@ const mapDispatchToProps = (dispatch: any) => {
 	}
 }
 
-const AppContainer = connect( mapStateToProps, mapDispatchToProps )( App );
+const SignupContainer = connect( mapStateToProps, mapDispatchToProps )( Signup );
 
-export default AppContainer;
+export default SignupContainer;

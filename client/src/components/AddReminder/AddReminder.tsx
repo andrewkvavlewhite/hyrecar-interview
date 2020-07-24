@@ -71,6 +71,12 @@ const AddReminder = (props: Props) => {
 	useEffect(() => { isAfter(startDate, endDate) && setEndDate(startDate) }, [startDate]);
 	useEffect(() => { isAfter(startDate, endDate) && setStartDate(endDate) }, [endDate]);
 
+	const validate = () => {
+		if (!title) {
+			throw `Name is required.`
+		}
+	}
+
 	return (
 		<Dialog
 			open={ isOpen }
@@ -104,11 +110,11 @@ const AddReminder = (props: Props) => {
 										onChange={setStartDate}
 										className={ classes.datetimeInputs }
 									/>
-									<DateTimePicker
+									{/* <DateTimePicker
 										value={endDate}
 										onChange={setEndDate}
 										className={ classes.datetimeInputs }
-									/>
+									/> */}
 								</div>
 							</div>
 							<div className={ classes.colorContainer }>
@@ -128,17 +134,22 @@ const AddReminder = (props: Props) => {
 			<DialogActions>
 				<Button 
 					onClick={() => {
-						onSave({
-							title,
-							startDate,
-							endDate,
-							color
-						});
-						setTitle(STATE_DEFAULTS.TITLE);
-						setColor(STATE_DEFAULTS.COLOR);
-						setStartDate(STATE_DEFAULTS.START_DATE());
-						setEndDate(STATE_DEFAULTS.END_DATE());
-						onClose();
+						try {
+							validate()
+							onSave({
+								title,
+								startDate,
+								endDate,
+								color
+							});
+							setTitle(STATE_DEFAULTS.TITLE);
+							setColor(STATE_DEFAULTS.COLOR);
+							setStartDate(STATE_DEFAULTS.START_DATE());
+							setEndDate(STATE_DEFAULTS.END_DATE());
+							onClose();
+						} catch(e) {
+							alert(e);
+						}
 					}}
 					color="primary"
 				>

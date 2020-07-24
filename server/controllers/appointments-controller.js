@@ -4,6 +4,7 @@ exports.all = async (req, res) => {
   knex
     .select('*')
     .from('appointments')
+    .where('user', req.user.id)
     .then(userData => {
       res.json(userData)
     })
@@ -15,7 +16,7 @@ exports.all = async (req, res) => {
 exports.create = async (req, res) => {
   knex('appointments')
     .insert({
-      'user': req.body.user,
+      'user': req.user.id,
       'title': req.body.title,
       'startDate': req.body.startDate,
       'endDate': req.body.endDate,
@@ -35,10 +36,10 @@ exports.create = async (req, res) => {
 
 exports.delete = async (req, res) => {
   knex('appointments')
-    .where('id', req.body.id)
+    .where('id', req.query.id)
     .del()
     .then(() => {
-      res.json({ message: `Appointment ${req.body.id} deleted.` })
+      res.json({ message: `Appointment ${req.query.id} deleted.` })
     })
     .catch(err => {
       res.json({ message: `There was an error deleting ${req.body.id} appointment: ${err}` })

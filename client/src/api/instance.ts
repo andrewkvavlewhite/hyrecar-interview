@@ -8,6 +8,15 @@ const instance = axios.create({
 instance.defaults.headers.post['Content-Type'] = 'application/json';
 instance.defaults.headers.patch['Content-Type'] = 'application/json';
 
-instance.defaults.headers.common['x-access-token'] = 'all';
+export const auth = token => {
+  if (token) {
+    instance.defaults.headers.common['authorization'] = `Bearer ${token}`;
+    localStorage.setItem('bearerToken', token);
+  } else {
+    delete instance.defaults.headers.common['authorization'];
+    localStorage.removeItem('bearerToken');
+  }
+}
+
 
 export default instance;

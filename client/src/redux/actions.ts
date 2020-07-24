@@ -3,6 +3,8 @@ export const OPEN_AGENDA = 'OPEN_AGENDA';
 export const CLOSE_AGENDA = 'CLOSE_AGENDA';
 export const OPEN_ADD_REMINDER = 'OPEN_ADD_REMINDER';
 export const CLOSE_ADD_REMINDER = 'CLOSE_ADD_REMINDER';
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
 
 interface DateObj {
 	date: Date
@@ -23,4 +25,12 @@ export function openAddReminder( reminder?: any ) {
 
 export function closeAddReminder() {
 	return { type: CLOSE_ADD_REMINDER };
+}
+
+export function login( user: any ) {
+	return { type: LOGIN, user }
+}
+
+export function logout() {
+	return { type: LOGOUT }
 }
