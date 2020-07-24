@@ -5,7 +5,7 @@ import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/s
 import { isSameMonth, isSameDay, getDate } from 'date-fns';
 import AppointmentType from '../../types/AppointmentType';
 import { Typography } from '@material-ui/core';
-import invert, { RGB, RgbArray, HexColor, BlackWhite } from 'invert-color';
+import invert from 'invert-color';
 
 
 const REMINDER_HEIGHT = 25;
@@ -91,7 +91,7 @@ const CalendarDay = (props: Props) => {
 	useLayoutEffect(() => {
 	  	const numRemindersToShow = Math.trunc(ref.current.clientHeight / REMINDER_HEIGHT);
 	  	setNumViewableReminders(numRemindersToShow);
-	});
+	}, []);
 
 	const isToday = isSameDay( dateObj.date, new Date() );
 	const avatarClass = isToday && focused ? classes.focusedTodayAvatar :

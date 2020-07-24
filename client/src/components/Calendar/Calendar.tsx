@@ -88,7 +88,7 @@ const Calendar = ( props: Props ) => {
 	// Get all appointments and place them into a map
 	useEffect(() => {
 		AppointmentsAPI.all().then(addAppointments);
-	}, []);
+	}, []); // eslint-disable-line
 
 	const month = date.toLocaleString( 'en-us', { month: isMobile ? 'short' : 'long' } );
 	const year = dateFns.getYear( date );

@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import CalendarDayContainer from '../CalendarDay/CalendarDayContainer';
-import AppointmentType from '../../types/AppointmentType';
-import { format } from 'date-fns';
 
 const styles = (theme: Theme) => createStyles({
 	monthContainer: {

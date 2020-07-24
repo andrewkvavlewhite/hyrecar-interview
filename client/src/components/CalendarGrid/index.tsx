@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles'
 import DaysRow from './DaysRow'
 import MonthContainer from './MonthContainer'
 import { getMonthCells, formatDatekey } from '../../utils/dateUtils'
-import AppointmentType from '../../types/AppointmentType'
 
 const styles = (theme: Theme) => createStyles({
 	calendarGrid: {

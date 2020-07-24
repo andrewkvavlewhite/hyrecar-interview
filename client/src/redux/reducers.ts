@@ -18,8 +18,6 @@ const initialAddReminderState = {
 	isOpen: false
 }
 
-const initialLogin = {}
-
 function agendaStatus( state = initialAgendaState , action: any ) {
 	switch( action.type ) {
 		case OPEN_AGENDA:

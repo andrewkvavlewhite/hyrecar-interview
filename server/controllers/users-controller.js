@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 
 exports.auth = async (req, res) => {
-    console.log('req.user',req.user)
     return res.json({ token: jwt.sign(req.user.id, config.JWT_SECRET), user: req.user });
 }
 

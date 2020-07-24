@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import App from './App';
 
-import { openAddReminder, login } from '../../redux/actions';
+import { login } from '../../redux/actions';
 
 interface Props {}
 interface State {

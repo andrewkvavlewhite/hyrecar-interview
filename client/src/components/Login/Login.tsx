@@ -47,13 +47,13 @@ const Login = ( props: Props ) => {
 
     const validate = () => {
         if (!username) {
-            throw `Username is required.`
+            throw new Error(`Username is required.`);
         }
         if (username.includes(' ')) {
-            throw `Spaces are not allowed in username.`
+            throw new Error(`Spaces are not allowed in username.`);
         }
         if (!password) {
-            throw `Please enter a password.`
+            throw new Error(`Please enter a password.`)
         }
     }
 
@@ -99,7 +99,7 @@ const Login = ( props: Props ) => {
                                                 auth(token);
                                                 login(user);
                                             } catch(e) {
-                                                alert(e);
+                                                alert(e.message);
                                             }
                                         }}
                                     >

@@ -68,12 +68,12 @@ const AddReminder = (props: Props) => {
 	const [endDate, setEndDate] = useState(STATE_DEFAULTS.END_DATE());
 
 	// make sure start date is never later than end date, and vice versa
-	useEffect(() => { isAfter(startDate, endDate) && setEndDate(startDate) }, [startDate]);
-	useEffect(() => { isAfter(startDate, endDate) && setStartDate(endDate) }, [endDate]);
+	useEffect(() => { isAfter(startDate, endDate) && setEndDate(startDate) }, [startDate]); // eslint-disable-line
+	useEffect(() => { isAfter(startDate, endDate) && setStartDate(endDate) }, [endDate]); // eslint-disable-line
 
 	const validate = () => {
 		if (!title) {
-			throw `Name is required.`
+			throw new Error(`Name is required.`)
 		}
 	}
 
@@ -148,7 +148,7 @@ const AddReminder = (props: Props) => {
 							setEndDate(STATE_DEFAULTS.END_DATE());
 							onClose();
 						} catch(e) {
-							alert(e);
+							alert(e.message);
 						}
 					}}
 					color="primary"

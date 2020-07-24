@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import useMedia from '../../utils/hooks/useMedia';
@@ -48,22 +47,22 @@ const Signup = ( props: Props ) => {
 
     const validate = () => {
         if (!name) {
-            throw `Name is required.`
+            throw new Error(`Name is required.`);
         }
         if (!username) {
-            throw `Username is required.`
+            throw new Error(`Username is required.`);
         }
         if (username.includes(' ')) {
-            throw `Spaces are not allowed in username.`
+            throw new Error(`Spaces are not allowed in username.`);
         }
         if (!password) {
-            throw `Please enter a password.`
+            throw new Error(`Please enter a password.`);
         }
         if (!confirmPassword) {
-            throw `Please confirm password.`
+            throw new Error(`Please confirm password.`);
         }
         if (password !== confirmPassword) {
-            throw `Passwords do not match.`
+            throw new Error(`Passwords do not match.`);
         }
     }
 
@@ -119,7 +118,7 @@ const Signup = ( props: Props ) => {
                                 goBack();
                                 login(user);
                             } catch(e) {
-                                alert(e);
+                                alert(e.message);
                             }
                         }}
                     >
