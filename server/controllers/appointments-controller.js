@@ -21,8 +21,12 @@ exports.create = async (req, res) => {
       'endDate': req.body.endDate,
       'color': req.body.color,
     })
-    .then(() => {
-      res.json({ message: `Appointment \'${req.body.title}\' by ${req.body.author} created.` })
+    .then(([ id ]) => {
+      knex('appointments')
+        .where('id', id)
+        .then(([ appt ]) => {
+          return res.json(appt)
+        });
     })
     .catch(err => {
       res.json({ message: `There was an error creating ${req.body.title} appointment: ${err}` })

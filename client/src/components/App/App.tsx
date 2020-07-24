@@ -16,7 +16,6 @@ import './App.css';
 import useMedia from '../../utils/hooks/useMedia';
 import { getNewDate, formatDatekey } from '../../utils/dateUtils';
 import { compareAsc } from 'date-fns';
-import { useLocalStorage } from 'react-use';
 import { AppointmentsAPI } from '../../api';
 
 const styles = (theme: Theme) => createStyles({
@@ -62,10 +61,32 @@ interface Props extends WithStyles<typeof styles>{
 const App = ( props: Props ) => {
 	const { classes, onFabAddClick } = props;
 	const [date, setDate] = useState(getNewDate());
-	const [appointmentMap, setAppointmentMap, removeAppointment] = useLocalStorage('appointmentMap', {});
-	// removeAppointment()
-	// const [ appointmentMap, setAppointmentMap ] = useState({});
+	const [ appointmentMap, setAppointmentMap ] = useState({});
 	const { isMobile } = useMedia();
+
+	const addAppointments = async appointments => {
+		const newMap = { ...appointmentMap };
+
+		for (let appt of appointments) {
+			appt.startDate = new Date(appt.startDate); // have to convert because sqlite returns as a string
+			appt.endDate = new Date(appt.endDate); // have to convert because sqlite returns as a string
+		
+			const formattedDateKey = formatDatekey(appt.startDate);
+	
+			if (!(formattedDateKey in newMap)) {
+				newMap[formattedDateKey] = [];
+			}
+	
+			newMap[formattedDateKey].push(appt);
+			newMap[formattedDateKey] = newMap[formattedDateKey].sort(compareAsc);
+		}
+		setAppointmentMap(newMap);
+	};
+
+	// Get all appointments and place them into a map
+	useEffect(() => {
+		AppointmentsAPI.all().then(addAppointments);
+	}, []);
 
 	const month = date.toLocaleString( 'en-us', { month: isMobile ? 'short' : 'long' } );
 	const year = dateFns.getYear( date );
@@ -77,22 +98,6 @@ const App = ( props: Props ) => {
 
 	const nextMonth = () => {
 		setDate(dateFns.addMonths( date, 1 ));
-	}
-
-	const addAppointment = appt => {
-		AppointmentsAPI.create(appt);
-		// const newMap = { ...appointmentMap };
-		
-		// const formattedDateKey = formatDatekey(appt.startDate);
-
-		// if (!(formattedDateKey in newMap)) {
-		// 	newMap[formattedDateKey] = [];
-		// }
-
-		// newMap[formattedDateKey].push(appt);
-		// newMap[formattedDateKey] = newMap[formattedDateKey].sort(compareAsc);
-
-		// setAppointmentMap(newMap);
 	}
 
 	return (
@@ -125,8 +130,13 @@ const App = ( props: Props ) => {
 				</Fab>
 			</Paper>
 			<AgendaDayContainer />
-			<AddReminderContainer onSave={newAppointment => {
-				addAppointment(newAppointment);
+			<AddReminderContainer onSave={async newAppointment => {
+				try {
+					const insertedAppointment = await AppointmentsAPI.create(newAppointment);
+					addAppointments([insertedAppointment]);
+				} catch(e) {
+					alert(e.message);
+				}
 			}} />
 		</div>
 	);

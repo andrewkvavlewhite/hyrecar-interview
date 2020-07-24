@@ -19,12 +19,8 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/api/hello', (req, res) => {
-  res.send({ express: 'Hello From Express' });
-});
-
 // Implement appointments route
-app.use('/appointments', appointmentsRouter);
+app.use('/api/appointments', appointmentsRouter);
 
 // Implement 500 error route
 app.use(function (err, req, res, next) {

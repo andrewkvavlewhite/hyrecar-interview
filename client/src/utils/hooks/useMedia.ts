@@ -14,6 +14,7 @@ const useMedia = () => {
     const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' });
 
     return {
+        isBigScreen,
         isDesktopOrLaptop,
         isTablet: isTabletOrMobile && !isMobile,
         isMobile,
