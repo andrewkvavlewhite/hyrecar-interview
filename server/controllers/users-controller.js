@@ -9,21 +9,21 @@ exports.auth = async (req, res) => {
 
 exports.get = async (req, res) => {
     knex
-        .select('*')
-        .from('users')
-        .where('username', req.query.username)
-        .then(async ([user]) => {
-            const match = await bcrypt.compare(req.query.password, user.password);
-            if (match) {
-                return res.json({ token: jwt.sign(user.id, config.JWT_SECRET), user })
-            } else {
-                res.status(401);
-                res.json({ message: `Incorrect password.` })
-            }
-        })
-        .catch(err => {
+      .select('*')
+      .from('users')
+      .where('username', req.query.username)
+      .then(async ([user]) => {
+          const match = await bcrypt.compare(req.query.password, user.password);
+          if (match) {
+              return res.json({ token: jwt.sign(user.id, config.JWT_SECRET), user })
+          } else {
+              res.status(401);
+              res.json({ message: `Incorrect password.` })
+          }
+      })
+      .catch(err => {
         res.json({ message: `There was an error retrieving users: ${err}` })
-        })
+      })
 }
 
 exports.create = async (req, res) => {

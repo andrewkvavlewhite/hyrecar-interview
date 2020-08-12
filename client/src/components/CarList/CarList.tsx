@@ -17,6 +17,10 @@ import { getNewDate, formatDatekey } from '../../utils/dateUtils';
 import { compareAsc } from 'date-fns';
 import { AppointmentsAPI } from '../../api';
 import { Button } from '@material-ui/core';
+import { useQuery, useMutation } from '@apollo/client';
+import { getMyCars as getMyCarsGQL, createCarGQL } from '../../api/Cars';
+import CarListItem from '../CarListItem/CarListItem';
+import AddCarContainer from '../AddCar/AddCarContainer';
 
 const styles = (theme: Theme) => createStyles({
 	root: {
@@ -60,47 +64,49 @@ interface Props extends WithStyles<typeof styles>{
 	onFabAddClick: () => void
 }
 
-const Calendar = ( props: Props ) => {
+const CarList = ( props: Props ) => {
 	const { classes, user, onFabAddClick, logout } = props;
-	const [date, setDate] = useState(getNewDate());
-	const [ appointmentMap, setAppointmentMap ] = useState({});
-	const { isMobile } = useMedia();
-
-	const addAppointments = async appointments => {
-		const newMap = { ...appointmentMap };
-
-		for (let appt of appointments) {
-			appt.startDate = new Date(appt.startDate); // have to convert because sqlite returns as a string
-			appt.endDate = new Date(appt.endDate); // have to convert because sqlite returns as a string
-		
-			const formattedDateKey = formatDatekey(appt.startDate);
-	
-			if (!(formattedDateKey in newMap)) {
-				newMap[formattedDateKey] = [];
+    const { isMobile } = useMedia();
+    const [cars, setCars] = useState([]);
+    
+    const { called, loading } = useQuery(
+        getMyCarsGQL,
+        {
+			onCompleted({ getMyCars }) {
+				setCars(getMyCars);
+          	},
+			onError(error) {
+				alert(error.message);
 			}
-	
-			newMap[formattedDateKey].push(appt);
-			newMap[formattedDateKey] = newMap[formattedDateKey].sort(compareAsc);
-		}
-		setAppointmentMap(newMap);
-    };
+        }
+    );
 
-	// Get all appointments and place them into a map
-	useEffect(() => {
-		// AppointmentsAPI.all().then(addAppointments);
-	}, []); // eslint-disable-line
-
-	const month = date.toLocaleString( 'en-us', { month: isMobile ? 'short' : 'long' } );
-	const year = dateFns.getYear( date );
-
-	// arrow functions to skip binding in constructor
-	const prevMonth = () => {
-		setDate(dateFns.subMonths( date, 1 ));
-	}
-
-	const nextMonth = () => {
-		setDate(dateFns.addMonths( date, 1 ));
-	}
+    const [createCar] = useMutation(
+        createCarGQL,
+        {
+            onCompleted({ createCar }) {
+                const _cars = [...cars, createCar];
+                setCars(_cars);
+            },
+            onError(err) {
+                alert(err.message)
+            }
+        }
+    );
+    
+    const onDeleteComplete = id => {
+        const _cars = [...cars];
+        const idx = _cars.findIndex(car => car.id === id);
+        _cars.splice(idx, 1);
+        setCars(_cars);
+    }
+    
+    const onUpdateComplete = newCar => {
+        const _cars = [...cars];
+        const idx = _cars.findIndex(car => car.id === newCar.id);
+        _cars.splice(idx, 1, newCar);
+        setCars(_cars);
+    }
 
 	return (
 		<div className={ classes.root }>
@@ -112,21 +118,20 @@ const Calendar = ( props: Props ) => {
                     <Typography>Hello, {user.name}!</Typography>
                     <Button onClick={logout}>Logout</Button>
                 </div>
-				<header className={ classes.calendarHeader }>
-					<IconButton aria-label='Last Month' onClick={ prevMonth }>
-						<KeyboardArrowLeftIcon fontSize='large' />
-					</IconButton>
-					<Typography variant={isMobile ? 'h4' : 'h3'}>
-						{ month } { year }
-					</Typography>
-					<IconButton aria-label='Next Month' onClick={ nextMonth }>
-						<KeyboardArrowRightIcon fontSize='large' />
-					</IconButton>
-				</header>
-				<CalendarGrid
-					date={ date }
-					appointments={appointmentMap}
-				/>
+
+                {
+                    !loading && cars.map(car => (
+                        <div style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <CarListItem
+                                key={car.id}
+                                {...car}
+                                onDeleteComplete={() => onDeleteComplete(car.id)}
+                                onUpdateComplete={onUpdateComplete}
+                            />
+                        </div>
+                    ))
+                }
+
 				<Fab
 					aria-label='Add'
 					className={classes.fabAdd}
@@ -135,17 +140,11 @@ const Calendar = ( props: Props ) => {
 					<AddIcon />
 				</Fab>
 			</Paper>
-			<AgendaDayContainer />
-			<AddReminderContainer onSave={async newAppointment => {
-				try {
-					// const insertedAppointment = await AppointmentsAPI.create(newAppointment);
-					// addAppointments([insertedAppointment]);
-				} catch(e) {
-					alert(e.message);
-				}
+			<AddCarContainer onSave={async newCar => {
+                createCar({ variables: newCar });
 			}} />
 		</div>
 	);
 }
 
-export default withStyles( styles )( Calendar );
+export default withStyles( styles )( CarList );

@@ -7,6 +7,8 @@ import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { UsersAPI, auth } from '../../api';
+import { useMutation } from '@apollo/client';
+import { signup as signupGQL } from '../../api/Users';
 
 const styles = (theme: Theme) => createStyles({
 	root: {
@@ -45,24 +47,42 @@ const Signup = ( props: Props ) => {
     const [ password, setPassword ] = useState('');
     const [ confirmPassword, setConfirmPassword ] = useState('');
 
+    const [doSignup, { loading, error }] = useMutation(
+        signupGQL,
+      {
+        onCompleted({ signup: user }) {
+            auth(user.token);
+            goBack();
+            login(user);
+        },
+        onError(err) {
+            alert(err.message)
+        }
+      }
+    );
+
     const validate = () => {
-        if (!name) {
-            throw new Error(`Name is required.`);
-        }
-        if (!username) {
-            throw new Error(`Username is required.`);
-        }
-        if (username.includes(' ')) {
-            throw new Error(`Spaces are not allowed in username.`);
-        }
-        if (!password) {
-            throw new Error(`Please enter a password.`);
-        }
-        if (!confirmPassword) {
-            throw new Error(`Please confirm password.`);
-        }
-        if (password !== confirmPassword) {
-            throw new Error(`Passwords do not match.`);
+        try {
+            if (!name) {
+                throw new Error(`Name is required.`);
+            }
+            if (!username) {
+                throw new Error(`Username is required.`);
+            }
+            if (username.includes(' ')) {
+                throw new Error(`Spaces are not allowed in username.`);
+            }
+            if (!password) {
+                throw new Error(`Please enter a password.`);
+            }
+            if (!confirmPassword) {
+                throw new Error(`Please confirm password.`);
+            }
+            if (password !== confirmPassword) {
+                throw new Error(`Passwords do not match.`);
+            }
+        } catch(e) {
+            alert(e.message);
         }
     }
 
@@ -107,19 +127,8 @@ const Signup = ( props: Props ) => {
                         variant="contained"
                         color="primary"
                         onClick={async () => {
-                            try {
-                                validate();
-                                const { token, user } = await UsersAPI.create({
-                                    name,
-                                    username,
-                                    password
-                                });
-                                auth(token);
-                                goBack();
-                                login(user);
-                            } catch(e) {
-                                alert(e.message);
-                            }
+                            validate();
+                            doSignup({ variables: { username, password, name }});
                         }}
                     >
                         Sign up

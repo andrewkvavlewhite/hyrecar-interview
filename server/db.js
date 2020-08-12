@@ -19,24 +19,24 @@ const knex = require('knex')({
     },
     useNullAsDefault: true
 })
-// Create a table in the database called "appointments"
+// Create a table in the database called "cars"
 knex.schema
-    // Make sure no "appointments" table exists
+    // Make sure no "cars" table exists
     // before trying to create new
-    .hasTable('appointments')
+    .hasTable('cars')
         .then((exists) => {
             if (!exists) {
-                return knex.schema.createTable('appointments', (table)  => {
+                return knex.schema.createTable('cars', (table)  => {
                     table.increments('id').primary()
-                    table.integer('user')
-                    table.string('title')
-                    table.dateTime('startDate')
-                    table.dateTime('endDate')
-                    table.string('color')
+                    table.string('make')
+                    table.string('model')
+                    table.string('year')
+                    table.string('vin')
+                    table.integer('userId')
                 })
                 .then(() => {
                     // Log success message
-                    console.log('Table \'Appointments\' created')
+                    console.log('Table \'Cars\' created')
                 })
                 .catch((error) => {
                     console.error(`There was an error creating table: ${error}`)

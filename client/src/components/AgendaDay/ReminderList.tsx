@@ -63,7 +63,7 @@ const ReminderList = (props: Props) => {
                                 { format(new Date(appt.startDate), 'h:mm a') }
                             </Typography>
                             <Button onClick={() => {
-                                AppointmentsAPI.delete(appt.id)
+                                // AppointmentsAPI.delete(appt.id)
                             }}>x</Button>
                         </div>
                     );

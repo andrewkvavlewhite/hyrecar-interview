@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import CalendarContainer from '../Calendar/CalendarContainer';
+import CarListContainer from '../CarList/CarListContainer';
 import './App.css';
 import LoginContainer from '../Login/LoginContainer';
 import { auth, UsersAPI } from '../../api';
+import { auth as authGQL } from '../../api/Users';
+import { useQuery } from '@apollo/client';
 
 interface Props {
 	user: any
@@ -12,20 +14,24 @@ interface Props {
 const App = ( props: Props ) => {
 	const { user, login } = props;
 
-	useEffect(() => {
-		const token = localStorage.getItem('bearerToken');
-		auth(token);
-		if(token) {
-			UsersAPI.auth()
-				.then(({ user }) => {
+    const { called, loading } = useQuery(
+        authGQL,
+        {
+			onCompleted({ auth: user }) {
+				if (user) {
+					auth(user.token);
 					login(user);
-				})
-		}
-	}, [login]);
+				}
+          	},
+			onError(error) {
+				alert(error.message);
+			}
+        }
+    );
 
 	if (user) {
 		return (
-			<CalendarContainer />
+			<CarListContainer />
 		)
 	} else {
 		return (

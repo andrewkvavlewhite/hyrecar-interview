@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -9,6 +9,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import SignupContainer from '../Signup/SignupContainer';
 import { UsersAPI, auth } from '../../api';
+import { login as loginGQL } from '../../api/Users';
+import { useLazyQuery } from '@apollo/client';
 
 const styles = (theme: Theme) => createStyles({
 	root: {
@@ -45,15 +47,44 @@ const Login = ( props: Props ) => {
     const [ password, setPassword ] = useState('');
     const [ isSignup, setSignup ] = useState(false);
 
+    const [doLogin, { called, loading }] = useLazyQuery(
+        loginGQL,
+        {
+          onCompleted({ login: user }) {
+            auth(user.token);
+            login(user);
+          },
+          onError(error) {
+            alert(error.message);
+          }
+        }
+    );
+    
+//     useEffect(() => {
+//         console.log('loginResponse', loginResponse)
+// ;        if (loginResponse?.data?.login) {
+//             const user = loginResponse.data.data.login;
+//             auth(user.token);
+//             login(user);
+//         }
+//         if (loginResponse?.errors) {
+//             alert(loginResponse.errors[0].message);
+//         }
+//     }, [loginResponse?.data]);
+
     const validate = () => {
-        if (!username) {
-            throw new Error(`Username is required.`);
-        }
-        if (username.includes(' ')) {
-            throw new Error(`Spaces are not allowed in username.`);
-        }
-        if (!password) {
-            throw new Error(`Please enter a password.`)
+        try {
+            if (!username) {
+                throw new Error(`Username is required.`);
+            }
+            if (username.includes(' ')) {
+                throw new Error(`Spaces are not allowed in username.`);
+            }
+            if (!password) {
+                throw new Error(`Please enter a password.`)
+            }
+        } catch(e) {
+            alert(e.message);
         }
     }
 
@@ -93,14 +124,8 @@ const Login = ( props: Props ) => {
                                         variant="contained"
                                         color="primary"
                                         onClick={async () => {
-                                            try {
-                                                validate();
-                                                const { token, user } = await UsersAPI.login({ username, password });
-                                                auth(token);
-                                                login(user);
-                                            } catch(e) {
-                                                alert(e.message);
-                                            }
+                                            validate();
+                                            doLogin({ variables: { username, password }});
                                         }}
                                     >
                                         Login

@@ -9,6 +9,9 @@ import calendarApp from './redux/reducers';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
+import client from './api/instance';
+import { ApolloProvider } from '@apollo/client';
+
 declare global {
     interface Window { __REDUX_DEVTOOLS_EXTENSION__: any; }
 }
@@ -19,11 +22,13 @@ const store = createStore(
 );
 
 ReactDOM.render(
-	<Provider store={ store as any}>
-		<MuiPickersUtilsProvider utils={DateFnsUtils}>
-			<AppContainer />
-		</MuiPickersUtilsProvider>
-	</Provider>,
+	<ApolloProvider client={client}>
+		<Provider store={ store as any}>
+			<MuiPickersUtilsProvider utils={DateFnsUtils}>
+				<AppContainer />
+			</MuiPickersUtilsProvider>
+		</Provider>
+	</ApolloProvider>,
 	document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
