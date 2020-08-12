@@ -1,4 +1,3 @@
-import API from './instance';
 import { gql } from '@apollo/client';
 
 export const getMyCars = gql`

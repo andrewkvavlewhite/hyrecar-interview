@@ -1,8 +1,5 @@
 const { DataSource } = require('apollo-datasource');
 const knex = require('../../db');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const config = require('../../config');
 
 class Car extends DataSource {
 
