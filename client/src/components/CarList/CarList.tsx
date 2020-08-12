@@ -2,25 +2,21 @@ import React, { useState, useEffect } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import green from '@material-ui/core/colors/green';
-import IconButton from '@material-ui/core/IconButton';
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
-import * as dateFns from 'date-fns';
-import CalendarGrid from '../CalendarGrid';
-import AgendaDayContainer from '../AgendaDay/AgendaDayContainer';
-import AddReminderContainer from '../AddReminder/AddReminderContainer';
 import useMedia from '../../utils/hooks/useMedia';
-import { getNewDate, formatDatekey } from '../../utils/dateUtils';
-import { compareAsc } from 'date-fns';
-import { AppointmentsAPI } from '../../api';
 import { Button } from '@material-ui/core';
 import { useQuery, useMutation } from '@apollo/client';
 import { getMyCars as getMyCarsGQL, createCarGQL } from '../../api/Cars';
 import CarListItem from '../CarListItem/CarListItem';
 import AddCarContainer from '../AddCar/AddCarContainer';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 const styles = (theme: Theme) => createStyles({
 	root: {
@@ -33,7 +29,7 @@ const styles = (theme: Theme) => createStyles({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
 		// padding: '10px',
 		// margin: '25px',
 		width: '100%',
@@ -115,23 +111,39 @@ const CarList = ( props: Props ) => {
 				style={{ margin: isMobile ? '0px' : '25px', padding: isMobile ? '0px' : '10px' }}
 			>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                    <Typography>Hello, {user.name}!</Typography>
-                    <Button onClick={logout}>Logout</Button>
+                    <Button onClick={() => {
+                        setCars([]);
+                        logout();
+                    }}>Logout</Button>
                 </div>
-
-                {
-                    !loading && cars.map(car => (
-                        <div style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <CarListItem
-                                key={car.id}
-                                {...car}
-                                onDeleteComplete={() => onDeleteComplete(car.id)}
-                                onUpdateComplete={onUpdateComplete}
-                            />
-                        </div>
-                    ))
-                }
-
+                <Typography style={{ fontSize: 25, marginBottom: 20 }}>{user.name}'s Cars</Typography>
+                <TableContainer component={Paper}>
+                    <Table aria-label="simple table">
+                        <TableHead>
+                        <TableRow>
+                            <TableCell>Make</TableCell>
+                            <TableCell>Model</TableCell>
+                            <TableCell>Year</TableCell>
+                            <TableCell>VIN</TableCell>
+                            <TableCell align="right">Actions</TableCell>
+                        </TableRow>
+                        </TableHead>
+                        {
+                            !loading ? (
+                                <TableBody>
+                                    {cars.map((car) => (
+                                        <CarListItem
+                                            key={car.id}
+                                            {...car}
+                                            onDeleteComplete={() => onDeleteComplete(car.id)}
+                                            onUpdateComplete={onUpdateComplete}
+                                        />
+                                    ))}
+                                </TableBody>
+                            ) : null
+                        }
+                    </Table>
+                </TableContainer>
 				<Fab
 					aria-label='Add'
 					className={classes.fabAdd}

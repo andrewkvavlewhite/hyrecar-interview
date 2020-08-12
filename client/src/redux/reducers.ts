@@ -2,8 +2,8 @@ import { combineReducers } from 'redux';
 import { 
 	OPEN_AGENDA,
 	CLOSE_AGENDA,
-	OPEN_ADD_REMINDER,
-	CLOSE_ADD_REMINDER,
+	OPEN_ADD_CAR,
+	CLOSE_ADD_CAR,
 	LOGIN,
 	LOGOUT
 } from './actions';
@@ -14,7 +14,7 @@ const initialAgendaState = {
 	appointments: []
 }
 
-const initialAddReminderState = {
+const initialAddCarState = {
 	isOpen: false
 }
 
@@ -36,13 +36,13 @@ function agendaStatus( state = initialAgendaState , action: any ) {
 	}
 }
 
-function addReminderStatus( state = initialAddReminderState, action: any ) {
+function addCarStatus( state = initialAddCarState, action: any ) {
 	switch( action.type ) {
-		case OPEN_ADD_REMINDER:
+		case OPEN_ADD_CAR:
 			return {
 				isOpen: true
 			}
-		case CLOSE_ADD_REMINDER:
+		case CLOSE_ADD_CAR:
 			return {
 				isOpen: false
 			}
@@ -62,7 +62,7 @@ function user( state = null, action: any ) {
 
 const calendarApp = combineReducers( {
 	agendaStatus,
-	addReminderStatus,
+	addCarStatus,
 	user
 } )
 

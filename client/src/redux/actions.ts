@@ -1,8 +1,8 @@
 // action types
 export const OPEN_AGENDA = 'OPEN_AGENDA';
 export const CLOSE_AGENDA = 'CLOSE_AGENDA';
-export const OPEN_ADD_REMINDER = 'OPEN_ADD_REMINDER';
-export const CLOSE_ADD_REMINDER = 'CLOSE_ADD_REMINDER';
+export const OPEN_ADD_CAR = 'OPEN_ADD_CAR';
+export const CLOSE_ADD_CAR = 'CLOSE_ADD_CAR';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 
@@ -19,12 +19,12 @@ export function closeAgenda() {
 	return { type: CLOSE_AGENDA };
 }
 
-export function openAddReminder( reminder?: any ) {
-	return { type: OPEN_ADD_REMINDER, reminder };
+export function openAddCar( car?: any ) {
+	return { type: OPEN_ADD_CAR, car };
 }
 
-export function closeAddReminder() {
-	return { type: CLOSE_ADD_REMINDER };
+export function closeAddCar() {
+	return { type: CLOSE_ADD_CAR };
 }
 
 export function login( user: any ) {

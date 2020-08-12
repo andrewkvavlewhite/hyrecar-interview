@@ -1,23 +1,23 @@
 import { connect } from 'react-redux';
 import AddCar from './AddCar';
-import { closeAddReminder } from '../../redux/actions';
+import { closeAddCar } from '../../redux/actions';
 
 interface State {
-	addReminderStatus: {
+	addCarStatus: {
 		isOpen: boolean
 	}
 }
 
 const mapStateToProps = (state:State) => {
 	return { 
-		isOpen: state.addReminderStatus.isOpen
+		isOpen: state.addCarStatus.isOpen
 	};
 }
 
 const mapDispatchToProps = (dispatch: any) => {
 	return {
 		onClose: () => {
-			dispatch( closeAddReminder() );
+			dispatch( closeAddCar() );
 		}
 	}
 }

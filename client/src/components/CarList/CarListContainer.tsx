@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import CarList from './CarList';
 
-import { openAddReminder, logout } from '../../redux/actions';
+import { openAddCar, logout } from '../../redux/actions';
 import { auth } from '../../api';
 
 interface Props {}
@@ -19,7 +19,7 @@ const mapStateToProps = ( state: State, ownProps: Props ) => {
 const mapDispatchToProps = (dispatch: any) => {
 	return {
 		onFabAddClick: () => {
-			dispatch( openAddReminder() );
+			dispatch( openAddCar() );
         },
         logout: () => {
             dispatch(logout());
